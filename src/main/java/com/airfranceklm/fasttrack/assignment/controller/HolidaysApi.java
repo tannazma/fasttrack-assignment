@@ -37,4 +37,17 @@ public class HolidaysApi {
         new HolidayRepository().deleteById(holidayId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Correct HTTP status for a successful deletion
     }
+
+    @RequestMapping(value = "/{holidayId}", method = RequestMethod.PUT)
+    public ResponseEntity<Holiday> updateHoliday(@PathVariable String holidayId, @RequestBody Holiday holiday) {
+        try {
+            if (!new HolidayRepository().existsById(holidayId)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            Holiday updatedHoliday = new HolidayRepository().updateHoliday(holidayId, holiday);
+            return new ResponseEntity<>(updatedHoliday, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

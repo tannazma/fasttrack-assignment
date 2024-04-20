@@ -3,6 +3,8 @@ package com.airfranceklm.fasttrack.assignment.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 public class HolidayRepository {
 
     private static List<Holiday> holidays = new ArrayList<>();
@@ -90,5 +92,16 @@ public class HolidayRepository {
         } else {
             throw new RuntimeException("Holiday not found with id: " + holidayId);
         }
+    }
+
+    public Holiday updateHoliday(String holidayId, Holiday updatedHoliday) {
+        for (int i = 0; i < holidays.size(); i++) {
+            Holiday holiday = holidays.get(i);
+            if (holiday.getHolidayId().equals(holidayId)) {
+                holidays.set(i, updatedHoliday); // Replace the old holiday with the updated one
+                return updatedHoliday;
+            }
+        }
+        throw new RuntimeException("Holiday not found with that id: " + holidayId);
     }
 }
