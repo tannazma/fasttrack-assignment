@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.airfranceklm.fasttrack.assignment.resources;
 
 public class Employee {
     private String employeeId;

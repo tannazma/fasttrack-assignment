@@ -1,6 +1,5 @@
-package com.example.demo.repository;
+package com.airfranceklm.fasttrack.assignment.resources;
 
-import com.example.demo.model.Employee;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
