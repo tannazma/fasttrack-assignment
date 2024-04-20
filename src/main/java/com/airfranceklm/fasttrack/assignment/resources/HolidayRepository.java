@@ -5,7 +5,7 @@ import java.util.List;
 
 public class HolidayRepository {
 
-    private static final List<Holiday> holidays = new ArrayList<>();
+    private static List<Holiday> holidays = new ArrayList<>();
 
     static {
         // Adding the initial employees
@@ -74,5 +74,21 @@ public class HolidayRepository {
     public Holiday add(Holiday holiday) {
         holidays.add(holiday);
         return holiday;
+    }
+
+    public boolean existsById(String holidayId) {
+        return holidays.stream().anyMatch(holiday -> holiday.getHolidayId().equals(holidayId));
+    }
+
+    public void deleteById(String holidayId) {
+        holidays = holidays.stream().filter(holiday -> !holiday.getHolidayId().equals(holidayId)).toList();
+    }
+
+    public void deleteHoliday(String holidayId) {
+        if (existsById(holidayId)) {
+            deleteById(holidayId);
+        } else {
+            throw new RuntimeException("Holiday not found with id: " + holidayId);
+        }
     }
 }

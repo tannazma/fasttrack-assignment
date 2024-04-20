@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.airfranceklm.fasttrack.assignment.resources.Holiday;
 import com.airfranceklm.fasttrack.assignment.resources.HolidayRepository;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/holidays")
@@ -25,5 +26,15 @@ public class HolidaysApi {
     public ResponseEntity<Holiday> addHoliday(@RequestBody Holiday holiday) {
         Holiday savedHoliday = new HolidayRepository().add(holiday);
         return new ResponseEntity<>(savedHoliday, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/{holidayId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteHoliday(@PathVariable String holidayId) {
+        if (!new HolidayRepository().existsById(holidayId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        new HolidayRepository().deleteById(holidayId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Correct HTTP status for a successful deletion
     }
 }
