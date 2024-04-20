@@ -70,4 +70,9 @@ public class HolidayRepository {
     public List<Holiday> findAll() {
         return new ArrayList<>(holidays);
     }
+
+    public Holiday add(Holiday holiday) {
+        holidays.add(holiday);
+        return holiday;
+    }
 }

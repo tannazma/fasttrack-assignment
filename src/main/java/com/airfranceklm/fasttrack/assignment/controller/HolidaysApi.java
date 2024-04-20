@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.airfranceklm.fasttrack.assignment.resources.Holiday;
 import com.airfranceklm.fasttrack.assignment.resources.HolidayRepository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/holidays")
@@ -20,4 +21,9 @@ public class HolidaysApi {
         return new ResponseEntity<>(holidays, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Holiday> addHoliday(@RequestBody Holiday holiday) {
+        Holiday savedHoliday = new HolidayRepository().add(holiday);
+        return new ResponseEntity<>(savedHoliday, HttpStatus.CREATED);
+    }
 }
