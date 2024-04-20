@@ -1,9 +1,8 @@
 package com.airfranceklm.fasttrack.assignment.resources;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.management.RuntimeErrorException;
 
 public class HolidayRepository {
 
@@ -73,7 +72,25 @@ public class HolidayRepository {
         return new ArrayList<>(holidays);
     }
 
-    public Holiday add(Holiday holiday) {
+    private boolean datesOverlap(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        System.out.println(
+                "Comparing Dates: Start1: " + start1 + ", End1: " + end1 + ", Start2: " + start2 + ", End2: " + end2);
+
+        boolean valid = start2.isAfter(end1) || start1.isAfter(end2);
+        boolean overlap = !valid;
+        System.out.println("Overlap: " + overlap);
+
+        return overlap;
+    }
+
+    public Holiday add(Holiday holiday) throws RuntimeException {
+        for (Holiday existingHoliday : holidays) {
+            if (datesOverlap(existingHoliday.getStartOfHoliday(), existingHoliday.getEndOfHoliday(),
+                    holiday.getStartOfHoliday(),
+                    holiday.getEndOfHoliday())) {
+                throw new RuntimeException("Holiday overlaps with an existing holiday.");
+            }
+        }
         holidays.add(holiday);
         return holiday;
     }
@@ -95,6 +112,14 @@ public class HolidayRepository {
     }
 
     public Holiday updateHoliday(String holidayId, Holiday updatedHoliday) {
+        for (int i = 0; i < holidays.size(); i++) {
+            Holiday holiday = holidays.get(i);
+            if (!holiday.getHolidayId().equals(holidayId)
+                    && datesOverlap(holiday.getStartOfHoliday(), holiday.getEndOfHoliday(),
+                            updatedHoliday.getStartOfHoliday(), updatedHoliday.getEndOfHoliday())) {
+                throw new RuntimeException("Updated holiday overlaps with another holiday.");
+            }
+        }
         for (int i = 0; i < holidays.size(); i++) {
             Holiday holiday = holidays.get(i);
             if (holiday.getHolidayId().equals(holidayId)) {
