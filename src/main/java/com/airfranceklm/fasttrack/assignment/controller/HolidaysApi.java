@@ -23,13 +23,13 @@ public class HolidaysApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Holiday> addHoliday(@RequestBody Holiday holiday) {
+    public ResponseEntity<?> addHoliday(@RequestBody Holiday holiday) {
         try {
             Holiday savedHoliday = new HolidayRepository().add(holiday);
             return new ResponseEntity<>(savedHoliday, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
