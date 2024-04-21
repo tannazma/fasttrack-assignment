@@ -1,5 +1,6 @@
 package com.airfranceklm.fasttrack.assignment.resources;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,13 +73,43 @@ public class HolidayRepository {
         return new ArrayList<>(holidays);
     }
 
+    private boolean isWorkingDay(LocalDateTime date) {
+        return date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY;
+    }
+
+    private int countWorkingDays(LocalDateTime start, LocalDateTime end) {
+        int workingDays = 0;
+        for (LocalDateTime date = start; date.isBefore(end); date = date.plusDays(1)) {
+            if (isWorkingDay(date)) {
+                workingDays++;
+            }
+        }
+        return workingDays;
+    }
+
+    private boolean hasAtleast3DaysGap(LocalDateTime end1, LocalDateTime start2) {
+        boolean holiday2StartsAtleast3DaysAfterHoliday1Ends = countWorkingDays(end1.plusDays(1), start2) >= 3;
+
+        return holiday2StartsAtleast3DaysAfterHoliday1Ends;
+    }
+
     private boolean datesOverlap(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
         System.out.println(
                 "Comparing Dates: Start1: " + start1 + ", End1: " + end1 + ", Start2: " + start2 + ", End2: " + end2);
 
-        boolean valid = start2.isAfter(end1) || start1.isAfter(end2);
+        boolean holiday1StartsAfterHoliday2 = start1.isAfter(end2);
+        boolean holiday2StartsAfterHoliday1 = start2.isAfter(end1);
+        boolean holiday1IsAtLeast3DaysAfterHoliday2 = hasAtleast3DaysGap(end2, start1);
+        boolean holiday2IsAtLeast3DaysAfterHoliday1 = hasAtleast3DaysGap(end1, start2);
+
+        boolean valid = (holiday1StartsAfterHoliday2 || holiday2StartsAfterHoliday1)
+                && (holiday1IsAtLeast3DaysAfterHoliday2 || holiday2IsAtLeast3DaysAfterHoliday1);
+
         boolean overlap = !valid;
-        System.out.println("Overlap: " + overlap);
+
+        System.out.println("checking overlaps - holiday1: " + start1 + end1 + " - holiday2: " + start2 + end2 +
+                " - holiday1IsAtLeast3DaysAfterHoliday2:" + holiday1IsAtLeast3DaysAfterHoliday2 +
+                " - holiday2IsAtLeast3DaysAfterHoliday1: " + holiday2IsAtLeast3DaysAfterHoliday1);
 
         return overlap;
     }
