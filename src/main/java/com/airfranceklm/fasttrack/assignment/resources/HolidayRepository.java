@@ -93,6 +93,13 @@ public class HolidayRepository {
         return holiday2StartsAtleast3DaysAfterHoliday1Ends;
     }
 
+    private boolean isPlannedInAdvance(LocalDateTime startHolidayDate) {
+        LocalDateTime today = LocalDateTime.now(); // This represents the current time, ideally injected for testability
+        System.out.println("Today's Date: " + today);
+        System.out.println(countWorkingDays(today, startHolidayDate));
+        return countWorkingDays(today, startHolidayDate) >= 5;
+    }
+
     private boolean datesOverlap(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
         System.out.println(
                 "Comparing Dates: Start1: " + start1 + ", End1: " + end1 + ", Start2: " + start2 + ", End2: " + end2);
@@ -115,6 +122,11 @@ public class HolidayRepository {
     }
 
     public Holiday add(Holiday holiday) throws RuntimeException {
+        System.out.println("Holiday Start Date: " + holiday.getStartOfHoliday());
+
+        if (!isPlannedInAdvance(holiday.getStartOfHoliday())) {
+            throw new RuntimeException("Holiday must be planned at least 5 working days before the start date.");
+        }
         for (Holiday existingHoliday : holidays) {
             if (datesOverlap(existingHoliday.getStartOfHoliday(), existingHoliday.getEndOfHoliday(),
                     holiday.getStartOfHoliday(),
@@ -143,17 +155,18 @@ public class HolidayRepository {
     }
 
     public Holiday updateHoliday(String holidayId, Holiday updatedHoliday) {
-        for (int i = 0; i < holidays.size(); i++) {
-            Holiday holiday = holidays.get(i);
-            if (!holiday.getHolidayId().equals(holidayId)
-                    && datesOverlap(holiday.getStartOfHoliday(), holiday.getEndOfHoliday(),
-                            updatedHoliday.getStartOfHoliday(), updatedHoliday.getEndOfHoliday())) {
-                throw new RuntimeException("Updated holiday overlaps with another holiday.");
-            }
+        if (!isPlannedInAdvance(updatedHoliday.getStartOfHoliday())) {
+            throw new RuntimeException(
+                    "Updated holiday must be planned at least 5 working days before the start date.");
         }
         for (int i = 0; i < holidays.size(); i++) {
             Holiday holiday = holidays.get(i);
             if (holiday.getHolidayId().equals(holidayId)) {
+                if (!holiday.getHolidayId().equals(holidayId)
+                        && datesOverlap(holiday.getStartOfHoliday(), holiday.getEndOfHoliday(),
+                                updatedHoliday.getStartOfHoliday(), updatedHoliday.getEndOfHoliday())) {
+                    throw new RuntimeException("Updated holiday overlaps with another holiday.");
+                }
                 holidays.set(i, updatedHoliday); // Replace the old holiday with the updated one
                 return updatedHoliday;
             }
