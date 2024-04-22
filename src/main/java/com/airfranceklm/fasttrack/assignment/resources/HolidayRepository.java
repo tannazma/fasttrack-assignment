@@ -12,7 +12,7 @@ public class HolidayRepository {
     static {
         // Adding the initial employees
         holidays.add(new Holiday(
-                "uuid1234-5678-9106",
+                "uuid1234-5678-9100",
                 "New Year Break",
                 "klm012350",
                 "2023-12-31T15:00:00+00:00",
