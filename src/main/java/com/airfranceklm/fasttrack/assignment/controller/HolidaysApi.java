@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.airfranceklm.fasttrack.assignment.resources.Holiday;
 import com.airfranceklm.fasttrack.assignment.resources.HolidayRepository;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/holidays")
 public class HolidaysApi {
 
