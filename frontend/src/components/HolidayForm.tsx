@@ -47,12 +47,6 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
     getHolidays();
   }, []);
 
-  const handleChange = (event: SelectChangeEvent<string>) => {
-    console.log("event:", event, event.target);
-    const { name, value } = event.target;
-    setHoliday((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setHoliday((prev) => ({ ...prev, [name]: value }));
@@ -67,22 +61,14 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
     <div className="flex pt-4 w-[100%] before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
       <form onSubmit={handleSubmit} className="z-[1] relative">
         <FormControl fullWidth margin="normal">
-          <InputLabel id="holiday-label">Holiday Label</InputLabel>
-          <Select
-            labelId="holiday-label"
+          <TextField
             id="holidayLabel"
             name="holidayLabel"
             value={holiday.holidayLabel}
             label="Holiday Label"
-            onChange={handleChange}
+            onChange={handleChangeInput}
             required
-          >
-            {holidays.map((h) => (
-              <MenuItem key={h.holidayLabel} value={h.holidayLabel}>
-                {h.holidayLabel}
-              </MenuItem>
-            ))}
-          </Select>
+          ></TextField>
         </FormControl>
 
         <TextField
