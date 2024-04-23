@@ -10,7 +10,7 @@ public class HolidayRepository {
     private static List<Holiday> holidays = new ArrayList<>();
 
     static {
-        // Adding the initial employees
+        // Adding the mock initial holidays
         holidays.add(new Holiday(
                 "uuid1234-5678-9100",
                 "New Year Break",
