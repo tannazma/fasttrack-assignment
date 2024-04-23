@@ -1,6 +1,7 @@
 "use client";
 
 import HolidayForm from "@/components/HolidayForm";
+import { Alert } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -14,7 +15,7 @@ interface HolidayInterface {
 export default function Home() {
   const [holidays, setHolidays] = useState<HolidayInterface[]>([]);
   const [submittedHoliday, setSubmittedHoliday] = useState(null);
-
+  const [error, setError] = useState("");
   const fetchHolidays = async () => {
     try {
       const response = await fetch("http://localhost:8080/holidays");
@@ -42,12 +43,15 @@ export default function Home() {
         },
         body: JSON.stringify(holiday),
       });
-      const savedHoliday = await response.json();
       if (response.ok) {
+        const savedHoliday = await response.json();
         console.log("Holiday submitted successfully:", savedHoliday);
         fetchHolidays(); // Fetch all holidays again to update the list, including the new one
         setSubmittedHoliday(savedHoliday); // Save the newly created holiday to state
+        setError("");
       } else {
+        setError(await response.text());
+        setSubmittedHoliday(null)
         throw new Error("Failed to submit holiday");
       }
     } catch (error) {
@@ -57,7 +61,9 @@ export default function Home() {
   };
 
   const parseDate = (dateStr) => new Date(dateStr);
-  const sortedHolidays = holidays.sort((a, b) => parseDate(a.endOfHoliday) - parseDate(b.startOfHoliday));
+  const sortedHolidays = holidays.sort(
+    (a, b) => parseDate(a.endOfHoliday) - parseDate(b.startOfHoliday)
+  );
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -76,7 +82,8 @@ export default function Home() {
         <HolidayForm onSubmit={handleHolidaySubmit} />
       </div>
       <div>
-        { submittedHoliday && sortedHolidays && (
+        {error &&  <Alert severity="error">{error}</Alert>}
+        {submittedHoliday && (
           <div className="mt-4 p-4 border rounded shadow-sm bg-blue-100">
             <h3 className="text-lg font-semibold text-blue-600">
               Newly Created Holiday
