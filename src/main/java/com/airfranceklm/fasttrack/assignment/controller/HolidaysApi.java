@@ -27,6 +27,7 @@ public class HolidaysApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> addHoliday(@RequestBody Holiday holiday) {
         try {
+            holiday.generateHolidayId();
             Holiday savedHoliday = new HolidayRepository().add(holiday);
             return new ResponseEntity<>(savedHoliday, HttpStatus.CREATED);
 
