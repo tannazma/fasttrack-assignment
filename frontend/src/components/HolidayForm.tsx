@@ -24,21 +24,21 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
   });
 
   useEffect(() => {
-    async function fetchData() {
+    async function getHolidays() {
       try {
         const response = await fetch("http://localhost:8080/holidays");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data: HolidayInterface[] = await response.json();
+        const data = await response.json();
         console.log(data);
         setHolidays(data);
       } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
       }
     }
-    fetchData();
-  }, []);
+    getHolidays();
+  }, [holidays]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
