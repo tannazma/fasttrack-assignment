@@ -101,9 +101,6 @@ public class HolidayRepository {
     }
 
     private boolean datesOverlap(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
-        System.out.println(
-                "Comparing Dates: Start1: " + start1 + ", End1: " + end1 + ", Start2: " + start2 + ", End2: " + end2);
-
         boolean holiday1StartsAfterHoliday2 = start1.isAfter(end2);
         boolean holiday2StartsAfterHoliday1 = start2.isAfter(end1);
         boolean holiday1IsAtLeast3DaysAfterHoliday2 = hasAtleast3DaysGap(end2, start1);
@@ -113,10 +110,6 @@ public class HolidayRepository {
                 && (holiday1IsAtLeast3DaysAfterHoliday2 || holiday2IsAtLeast3DaysAfterHoliday1);
 
         boolean overlap = !valid;
-
-        System.out.println("checking overlaps - holiday1: " + start1 + end1 + " - holiday2: " + start2 + end2 +
-                " - holiday1IsAtLeast3DaysAfterHoliday2:" + holiday1IsAtLeast3DaysAfterHoliday2 +
-                " - holiday2IsAtLeast3DaysAfterHoliday1: " + holiday2IsAtLeast3DaysAfterHoliday1);
 
         return overlap;
     }
