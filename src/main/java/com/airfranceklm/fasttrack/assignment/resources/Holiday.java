@@ -2,6 +2,7 @@ package com.airfranceklm.fasttrack.assignment.resources;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class Holiday {
     private String holidayId;
@@ -13,7 +14,8 @@ public class Holiday {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
-    public Holiday(String holidayId, String holidayLabel, String employeeId, String startOfHoliday, String endOfHoliday, String status) {
+    public Holiday(String holidayId, String holidayLabel, String employeeId, String startOfHoliday, String endOfHoliday,
+            String status) {
         this.holidayId = holidayId;
         this.holidayLabel = holidayLabel;
         this.employeeId = employeeId;
@@ -24,6 +26,11 @@ public class Holiday {
 
     public String getHolidayId() {
         return this.holidayId;
+    }
+
+    public void generateHolidayId() {
+        UUID uuid = UUID.randomUUID();
+        this.holidayId = uuid.toString();
     }
 
     public String getHolidayLabel() {
