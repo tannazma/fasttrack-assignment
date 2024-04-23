@@ -73,6 +73,16 @@ export default function Home() {
         <HolidayForm onSubmit={handleHolidaySubmit} />
       </div>
       <ul>
+        {submitted &&
+          holidays.map((holiday) => (
+            <li key={holiday.holidayLabel}>
+              {holiday.holidayLabel} ({holiday.startOfHoliday} to
+              {holiday.endOfHoliday}) - Status: {holiday.status}
+            </li>
+          ))}
+      </ul>
+      <footer className="bg-gradient-to-t via-white fixed bottom-0 left-0 w-full text-sm font-mono border-b border-blue-50 bg-gradient-to-blue from-blue-100 pb-6 pt-8 backdrop-blur-2xl">
+        <div className="max-w-5xl mx-auto py-2 px-1 flex justify-center items-center h-full">
           <p>
             By
             <a
