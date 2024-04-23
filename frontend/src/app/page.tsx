@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface HolidayInterface {
+  holidayId: number;
   holidayLabel: string;
   startOfHoliday: string;
   endOfHoliday: string;
@@ -51,7 +52,7 @@ export default function Home() {
         setError("");
       } else {
         setError(await response.text());
-        setSubmittedHoliday(null)
+        setSubmittedHoliday(null);
         throw new Error("Failed to submit holiday");
       }
     } catch (error) {
@@ -82,7 +83,7 @@ export default function Home() {
         <HolidayForm onSubmit={handleHolidaySubmit} />
       </div>
       <div>
-        {error &&  <Alert severity="error">{error}</Alert>}
+        {error && <Alert severity="error">{error}</Alert>}
         {submittedHoliday && (
           <div className="mt-4 p-4 border rounded shadow-sm bg-blue-100">
             <h3 className="text-lg font-semibold text-blue-600">
@@ -106,7 +107,7 @@ export default function Home() {
       <div className="flex flex-row flex-wrap gap-5 ">
         {sortedHolidays.map((h) => (
           <div
-            key={h.holidayLabel}
+            key={h.holidayId}
             className="flex-col flex mt-4 p-4 border rounded shadow-sm bg-blue-50"
           >
             <h3 className="text-lg font-semibold">{h.holidayLabel}</h3>
