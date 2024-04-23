@@ -87,14 +87,14 @@ export default function Home() {
             By
             <a
               href="https://github.com/tannazma"
-              className="font-semibold text-blue-300"
+              className="font-semibold text-blue-300 hover:text-blue-500"
             >
               {" "}
               Tannaz
             </a>
           </p>
         </div>
-      </div>
+      </footer>
     </main>
   );
 }
