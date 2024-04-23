@@ -56,6 +56,9 @@ export default function Home() {
     console.log("Submitting holiday:", holiday);
   };
 
+  const parseDate = (dateStr) => new Date(dateStr);
+  const sortedHolidays = holidays.sort((a, b) => parseDate(a.endOfHoliday) - parseDate(b.startOfHoliday));
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <p className="mb-3 text-2xl font-semibold fixed left-50% top-0 flex w-full justify-center border-b border-blue-50 bg-gradient-to-b from-blue-100 pb-6 pt-8 backdrop-blur-2xl">
@@ -72,12 +75,11 @@ export default function Home() {
         />
         <HolidayForm onSubmit={handleHolidaySubmit} />
       </div>
-
-      <ul>
-        {submittedHoliday && (
-          <div className="mt-4 p-4 border rounded shadow-sm">
-            <h3 className="text-lg font-semibold">
-              Newly Created Holiday Details
+      <div>
+        { submittedHoliday && sortedHolidays && (
+          <div className="mt-4 p-4 border rounded shadow-sm bg-blue-100">
+            <h3 className="text-lg font-semibold text-blue-600">
+              Newly Created Holiday
             </h3>
             <p>
               <strong>Label:</strong> {submittedHoliday.holidayLabel}
@@ -93,7 +95,28 @@ export default function Home() {
             </p>
           </div>
         )}
-      </ul>
+      </div>
+      <div className="flex flex-row flex-wrap gap-5 ">
+        {sortedHolidays.map((h) => (
+          <div
+            key={h.holidayLabel}
+            className="flex-col flex mt-4 p-4 border rounded shadow-sm bg-blue-50"
+          >
+            <h3 className="text-lg font-semibold">{h.holidayLabel}</h3>
+            <p>
+              <strong>Start:</strong> {h.startOfHoliday}
+            </p>
+            <p>
+              <strong>End:</strong> {h.endOfHoliday}
+            </p>
+            <p>
+              <strong>Status:</strong>
+              {h.status}
+            </p>
+          </div>
+        ))}
+      </div>
+
       <footer className="bg-gradient-to-t via-white fixed bottom-0 left-0 w-full text-sm font-mono border-b border-blue-50 bg-gradient-to-blue from-blue-100 pb-6 pt-8 backdrop-blur-2xl">
         <div className="max-w-5xl mx-auto py-2 px-1 flex justify-center items-center h-full">
           <p>
