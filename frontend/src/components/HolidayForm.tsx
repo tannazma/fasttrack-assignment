@@ -1,4 +1,12 @@
 import React, { useEffect, useState } from "react";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+} from "@mui/material";
 
 interface HolidayInterface {
   holidayId: number;
@@ -57,47 +65,68 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="holidayLabel">
-        Holiday Label:
-        <select
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="holiday-label">Holiday Label</InputLabel>
+        <Select
+          labelId="holiday-label"
+          id="holidayLabel"
           name="holidayLabel"
           value={holiday.holidayLabel}
+          label="Holiday Label"
           onChange={handleChange}
           required
         >
           {holidays.map((h) => (
-            <option key={h.holidayId} value={h.holidayLabel}>
+            <MenuItem key={h.holidayId} value={h.holidayLabel}>
               {h.holidayLabel}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </label>
+        </Select>
+      </FormControl>
 
-      <label htmlFor="startOfHoliday">
-        Start Date:
-        <input
-          type="datetime-local"
-          id="startOfHoliday"
-          name="startOfHoliday"
-          value={holiday.startOfHoliday}
-          onChange={handleChangeInput}
-          required
-        />
-      </label>
-
-      <label htmlFor="endOfHoliday">End Date:</label>
-      <input
+      <TextField
+        margin="normal"
+        fullWidth
+        id="startOfHoliday"
+        name="startOfHoliday"
+        label="Start Date"
         type="datetime-local"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        value={holiday.startOfHoliday}
+        onChange={handleChangeInput}
+        required
+      />
+
+      <TextField
+        margin="normal"
+        fullWidth
         id="endOfHoliday"
         name="endOfHoliday"
+        label="End Date"
+        type="datetime-local"
+        InputLabelProps={{
+          shrink: true,
+        }}
         value={holiday.endOfHoliday}
         onChange={handleChangeInput}
         required
       />
 
-      <button type="submit">Submit</button>
-      <button
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 3, mb: 2 }}
+      >
+        Submit
+      </Button>
+      <Button
         type="button"
+        variant="outlined"
+        color="secondary"
+        sx={{ mt: 1, mb: 2 }}
         onClick={() =>
           setHoliday({
             holidayLabel: "",
@@ -109,7 +138,7 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
         }
       >
         Cancel
-      </button>
+      </Button>
     </form>
   );
 }
