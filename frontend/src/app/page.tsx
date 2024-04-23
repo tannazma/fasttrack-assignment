@@ -2,6 +2,7 @@
 
 import HolidayForm from "@/components/HolidayForm";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface HolidayInterface {
   holidayLabel: string;
@@ -11,7 +12,47 @@ interface HolidayInterface {
 }
 
 export default function Home() {
-  const handleHolidaySubmit = (holiday: HolidayInterface) => {
+  const [holidays, setHolidays] = useState<HolidayInterface[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const fetchHolidays = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/holidays");
+      const data = await response.json();
+      if (response.ok) {
+        setHolidays(data); // Update the holidays state with the fetched data
+      } else {
+        throw new Error("Failed to fetch holidays");
+      }
+    } catch (error) {
+      console.error("Error fetching holidays:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHolidays();
+  }, []); // Empty dependency array ensures this runs only once after the component mounts
+
+  const handleHolidaySubmit = async (holiday: HolidayInterface) => {
+    try {
+      const response = await fetch("http://localhost:8080/holidays", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(holiday),
+      });
+      const savedHoliday = await response.json();
+      if (response.ok) {
+        console.log("Holiday submitted successfully:", savedHoliday);
+        fetchHolidays(); // Fetch all holidays again to update the list, including the new one
+        setSubmitted(true);
+      } else {
+        throw new Error("Failed to submit holiday");
+      }
+    } catch (error) {
+      console.error("Error submitting holiday:", error);
+    }
     console.log("Submitting holiday:", holiday);
   };
 
