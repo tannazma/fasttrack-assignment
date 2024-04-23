@@ -13,7 +13,7 @@ interface HolidayInterface {
 
 export default function Home() {
   const [holidays, setHolidays] = useState<HolidayInterface[]>([]);
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedHoliday, setSubmittedHoliday] = useState(null);
 
   const fetchHolidays = async () => {
     try {
@@ -46,7 +46,7 @@ export default function Home() {
       if (response.ok) {
         console.log("Holiday submitted successfully:", savedHoliday);
         fetchHolidays(); // Fetch all holidays again to update the list, including the new one
-        setSubmitted(true);
+        setSubmittedHoliday(savedHoliday); // Save the newly created holiday to state
       } else {
         throw new Error("Failed to submit holiday");
       }
@@ -72,14 +72,27 @@ export default function Home() {
         />
         <HolidayForm onSubmit={handleHolidaySubmit} />
       </div>
+
       <ul>
-        {submitted &&
-          holidays.map((holiday) => (
-            <li key={holiday.holidayLabel}>
-              {holiday.holidayLabel} ({holiday.startOfHoliday} to
-              {holiday.endOfHoliday}) - Status: {holiday.status}
-            </li>
-          ))}
+        {submittedHoliday && (
+          <div className="mt-4 p-4 border rounded shadow-sm">
+            <h3 className="text-lg font-semibold">
+              Newly Created Holiday Details
+            </h3>
+            <p>
+              <strong>Label:</strong> {submittedHoliday.holidayLabel}
+            </p>
+            <p>
+              <strong>Start:</strong> {submittedHoliday.startOfHoliday}
+            </p>
+            <p>
+              <strong>End:</strong> {submittedHoliday.endOfHoliday}
+            </p>
+            <p>
+              <strong>Status:</strong> {submittedHoliday.status}
+            </p>
+          </div>
+        )}
       </ul>
       <footer className="bg-gradient-to-t via-white fixed bottom-0 left-0 w-full text-sm font-mono border-b border-blue-50 bg-gradient-to-blue from-blue-100 pb-6 pt-8 backdrop-blur-2xl">
         <div className="max-w-5xl mx-auto py-2 px-1 flex justify-center items-center h-full">
