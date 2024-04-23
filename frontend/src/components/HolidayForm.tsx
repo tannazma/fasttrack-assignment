@@ -6,10 +6,10 @@ import {
   MenuItem,
   TextField,
   Button,
+  SelectChangeEvent,
 } from "@mui/material";
 
 interface HolidayInterface {
-  holidayId: number;
   holidayLabel: string;
   startOfHoliday: string;
   endOfHoliday: string;
@@ -27,7 +27,6 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
     holidayLabel: existingHoliday ? existingHoliday.holidayLabel : "",
     startOfHoliday: existingHoliday ? existingHoliday.startOfHoliday : "",
     endOfHoliday: existingHoliday ? existingHoliday.endOfHoliday : "",
-    holidayId: existingHoliday ? existingHoliday.holidayId : 0,
     status: existingHoliday ? existingHoliday.status : "DRAFT",
   });
 
@@ -46,9 +45,10 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
       }
     }
     getHolidays();
-  }, [holidays]);
+  }, []);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    console.log("event:", event, event.target);
     const { name, value } = event.target;
     setHoliday((prev) => ({ ...prev, [name]: value }));
   };
@@ -64,82 +64,83 @@ function HolidayForm({ onSubmit, existingHoliday }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="holiday-label">Holiday Label</InputLabel>
-        <Select
-          labelId="holiday-label"
-          id="holidayLabel"
-          name="holidayLabel"
-          value={holiday.holidayLabel}
-          label="Holiday Label"
-          onChange={handleChange}
+    <div className="flex pt-4 w-[100%] before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
+      <form onSubmit={handleSubmit} className="z-[1] relative">
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="holiday-label">Holiday Label</InputLabel>
+          <Select
+            labelId="holiday-label"
+            id="holidayLabel"
+            name="holidayLabel"
+            value={holiday.holidayLabel}
+            label="Holiday Label"
+            onChange={handleChange}
+            required
+          >
+            {holidays.map((h) => (
+              <MenuItem key={h.holidayLabel} value={h.holidayLabel}>
+                {h.holidayLabel}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <TextField
+          margin="normal"
+          fullWidth
+          id="startOfHoliday"
+          name="startOfHoliday"
+          label="Start Date"
+          type="datetime-local"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={holiday.startOfHoliday}
+          onChange={handleChangeInput}
           required
-        >
-          {holidays.map((h) => (
-            <MenuItem key={h.holidayId} value={h.holidayLabel}>
-              {h.holidayLabel}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+        />
 
-      <TextField
-        margin="normal"
-        fullWidth
-        id="startOfHoliday"
-        name="startOfHoliday"
-        label="Start Date"
-        type="datetime-local"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        value={holiday.startOfHoliday}
-        onChange={handleChangeInput}
-        required
-      />
-
-      <TextField
-        margin="normal"
-        fullWidth
-        id="endOfHoliday"
-        name="endOfHoliday"
-        label="End Date"
-        type="datetime-local"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        value={holiday.endOfHoliday}
-        onChange={handleChangeInput}
-        required
-      />
-
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        sx={{ mt: 3, mb: 2 }}
-      >
-        Submit
-      </Button>
-      <Button
-        type="button"
-        variant="outlined"
-        color="secondary"
-        sx={{ mt: 1, mb: 2 }}
-        onClick={() =>
-          setHoliday({
-            holidayLabel: "",
-            startOfHoliday: "",
-            endOfHoliday: "",
-            status: "DRAFT",
-            holidayId: 0,
-          })
-        }
-      >
-        Cancel
-      </Button>
-    </form>
+        <TextField
+          margin="normal"
+          fullWidth
+          id="endOfHoliday"
+          name="endOfHoliday"
+          label="End Date"
+          type="datetime-local"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={holiday.endOfHoliday}
+          onChange={handleChangeInput}
+          required
+        />
+        <div className="flex gap-8">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Submit
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={() =>
+              setHoliday({
+                holidayLabel: "",
+                startOfHoliday: "",
+                endOfHoliday: "",
+                status: "DRAFT",
+              })
+            }
+          >
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
 
