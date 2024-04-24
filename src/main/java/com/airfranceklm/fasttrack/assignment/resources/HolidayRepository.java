@@ -95,8 +95,6 @@ public class HolidayRepository {
 
     private boolean isPlannedInAdvance(LocalDateTime startHolidayDate) {
         LocalDateTime today = LocalDateTime.now(); // This represents the current time, ideally injected for testability
-        System.out.println("Today's Date: " + today);
-        System.out.println(countWorkingDays(today, startHolidayDate));
         return countWorkingDays(today, startHolidayDate) >= 5;
     }
 
@@ -115,7 +113,6 @@ public class HolidayRepository {
     }
 
     public Holiday add(Holiday holiday) throws RuntimeException {
-        System.out.println("Holiday Start Date: " + holiday.getStartOfHoliday());
 
         if (!isPlannedInAdvance(holiday.getStartOfHoliday())) {
             throw new RuntimeException("Holiday must be planned at least 5 working days before the start date.");
